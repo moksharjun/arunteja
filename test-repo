@@ -1,0 +1,29 @@
+from git import Repo, Actor
+
+def push_to_github(repo_path, remote_name, branch_name, commit_message):
+    # Initialize the repository object
+    repo = Repo(repo_path)
+    
+    # Check if there are any changes to commit
+    if repo.is_dirty():
+        # Stage all changed files
+        repo.git.add(A=True)
+        
+        # Create a commit
+        author = Actor("Your Name", "your_email@example.com")
+        repo.index.commit(commit_message, author=author)
+        
+        # Push the changes
+        origin = repo.remotes[remote_name]
+        origin.push(refspec=f"{branch_name}:{branch_name}")
+        print(f"Changes pushed to {remote_name}/{branch_name}")
+    else:
+        print("No changes to commit.")
+
+# Example usage
+repo_path = '/path/to/your/local/repository'
+remote_name = 'origin'  # Default remote name
+branch_name = 'main'    # Default branch name
+commit_message = 'Update files'
+
+push_to_github(repo_path, remote_name, branch_name, commit_message)
